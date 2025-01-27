@@ -1,0 +1,70 @@
+def Double_cover(G):
+    n=G.order()
+    BG=Graph()
+    for e in G.edges():
+        BG.add_edge(e[0],n+e[1])
+        BG.add_edge(n+e[0],e[1])
+    return BG
+
+def Double_graph(G):
+    n=G.order()
+    DG=Graph()
+    for e in G.edges():
+        DG.add_edge(e[0],e[1])
+        DG.add_edge(n+e[0],n+e[1])
+        DG.add_edge(e[0],n+e[1])
+        DG.add_edge(n+e[0],e[1])
+    return DG
+
+def Local_energy_v2(G,v):
+    A = G.adjacency_matrix()
+    spectra=A.eigenvectors_right()
+    v_energy=0
+    for k in range(len(spectra)):
+        for i in range(spectra[k][2]):
+            v_energy+=abs(spectra[k][0])*(spectra[k][1][i][v]^2)/(norm(spectra[k][1][i]))^2
+    return v_energy
+
+G1=S4 #Star graph with 5 vertices
+BG1=BipartiteGraph(Double_cover(G1))
+DG1=Double_graph(G1)
+
+G1.show()
+BG1.show()
+DG1.show()
+for v in range(G1.order()):
+    print("v:",v,"E_G1(v):",Local_energy_v2(G1,v))
+for v in range(BG1.order()):
+    print("v:",v,"E_BG1(v):",Local_energy_v2(BG1,v))
+for v in range(DG1.order()):
+    print("v:",v,"E_DG1(v):",Local_energy_v2(DG1,v))
+
+G2=Graph({0:[1,3,4], 1:[2,5], 2:[3,6],3:[7],4:[5,7],5:[6],6:[7]}) #A cube graph
+BG2=BipartiteGraph(Double_cover(G2))
+DG2=Double_graph(G2)
+
+G2.show()
+BG2.show()
+DG2.show()
+
+for v in range(G2.order()):
+    print("v:",v,"E_G2(v):",Local_energy_v2(G2,v))
+for v in range(BG2.order()):
+    print("v:",v,"E_BG2(v):",Local_energy_v2(BG2,v))
+for v in range(DG2.order()):
+    print("v:",v,"E_DG2(v):",Local_energy_v2(DG2,v))
+
+G3 = graphs.CompleteGraph(4) #A complete graph with 4 vertices
+BG3=BipartiteGraph(Double_cover(G3))
+DG3=Double_graph(G3)
+
+G3.show()
+BG3.show()
+DG3.show()
+
+for v in range(G3.order()):
+    print("v:",v,"E_G3(v):",Local_energy_v2(G3,v))
+for v in range(BG3.order()):
+    print("v:",v,"E_BG3(v):",Local_energy_v2(BG3,v))
+for v in range(DG3.order()):
+    print("v:",v,"E_DG3(v):",Local_energy_v2(DG3,v))
